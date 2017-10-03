@@ -35,31 +35,39 @@ export default {
     ])
   },
   mounted() {
-    this.getHotMovie()
-      .then(this.getHotMovie(5, 5))
-      .then(() => {
-        return new Promise(function(resolve, reject) {
-          resolve()
+    try {
+      this.getHotMovie()
+        .then(this.getHotMovie(5, 5))
+        .then(() => {
+          return new Promise(function(resolve, reject) {
+            resolve()
+          })
+            .then(this.getHotMovie(10, 5))
         })
-          .then(this.getHotMovie(10, 5))
-      })
+    } catch (error) {
+
+    }
   },
   methods: {
     getHotMovie(start = 0, count = 5) {
-      axios.get('/api/getHotMovie', {
-        params: {
-          start: start,
-          count: count
-        }
-      }).then((res) => {
-        // console.log(res.data.subjects)
-        this.formatMovie(res.data.subjects)
-      }).catch((e) => {
-        console.log(e)
-      })
-      return new Promise((resolve, reject) => {
-        resolve()
-      })
+      try {
+        axios.get('/api/getHotMovie', {
+          params: {
+            start: start,
+            count: count
+          }
+        }).then((res) => {
+          // console.log(res.data.subjects)
+          this.formatMovie(res.data.subjects)
+        }).catch((e) => {
+          console.log(e)
+        })
+        return new Promise((resolve, reject) => {
+          resolve()
+        })
+      } catch (error) {
+
+      }
     },
     ...mapActions([
       'setMovieList'
@@ -111,9 +119,11 @@ export default {
 .el-carousel__button {
   background: #665b5b;
 }
+
 .el-rate__icon {
   font-size: 14px !important;
 }
+
 .el-carousel__arrow {
   background: rgba(0, 0, 0, .5);
   color: #fff;
